@@ -2,4 +2,4 @@
 
 ## 内容
 
-[CentOS上安装Docker](install/centos.md)
+[CentOS上安装Docker](docs/install/centos.md)
