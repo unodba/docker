@@ -49,13 +49,13 @@ This script adds the `docker.repo` repository and installs Docker.
 
 ### yum安装
 
-1. 使用root权限登陆系统。
+1.使用root权限登陆系统。
 
-2. 更新系统包到最新。
+2.更新系统包到最新。
 ```shell
 # yum -y update
 ```
-3. 添加yum仓库
+3.添加yum仓库
 ```shell
 # cat >/etc/yum.repos.d/docker.repo <<-EOF
 [dockerrepo]
@@ -67,20 +67,22 @@ gpgkey=https://yum.dockerproject.org/gpg
 EOF
 ```
 
-4. 安装Docker包
+4.安装Docker包
 ```shell
 # yum install -y docker-engine
 # yum install -y docker-selinux
 # yum list installed | grep docker
 ```
+  这里有个非常坑的情况，官方文档没有提到docker-selinux的安装，笔者在使用VirtualBox，配置一个桥接，一个Host-Only的网卡时，启动报错。。
+  可以看github上的两个issues，[1.8.0: Systemd can't start docker on Centos 7.1 #15498](https://github.com/docker/docker/issues/15498),[Docker start times out if firewalld is started #13019](https://github.com/docker/docker/issues/13019)。
 
-5. 启动Docker
+5.启动Docker
 ```shell
 # systemctl stop firewalld.service
 # systemctl start docker.service
 ```
 
-6. 验证docker已经正常安装
+6.验证docker已经正常安装
 ```shell
 $ docker run hello-world
 ```
@@ -94,16 +96,16 @@ docker daemon总是使用root用户运行。
 警告：docker组等同于root用户；关于这会如何影响你系统的安全性，详情参考
 [Docker Daemon Attack Surface](https://docs.docker.com/articles/security/#docker-daemon-attack-surface) .
 
-1. 使用超户权限登陆
+1.使用超户权限登陆
 
-2. 创建docker用户组并添加用户
+2.创建docker用户组并添加用户
 ```shell
 $ sudo usermod -aG docker your_username
 ```
-3. 登出并重新登陆
+3.登出并重新登陆
 这保证你的用户正确的权限运行。
 
-4. 不使用sudo运行docker验证正常
+4.不使用sudo运行docker验证正常
 ```shell
 $ docker run hello-world
 ```
@@ -119,20 +121,20 @@ If you need to add an HTTP Proxy, set a different directory or partition for the
 
 使用yum卸载Docker。
 
-1. 列出安装的软件包
+1.列出安装的软件包
 ```shell
 $ yum list installed | grep docker
 yum list installed | grep docker
 docker-engine.x86_64                1.7.1-1.el7
 ```
-2. 移除软件包
+2.移除软件包
 ```shell
 $ sudo yum -y remove docker-engine.x86_64
 ```
 上面的命令不会删除镜像，容器，卷组和用户自配置文件。
 
-3. 删除所有镜像，容器和卷组
+3.删除所有镜像，容器和卷组
 ```shell
 $ rm -rf /var/lib/docker
 ```
-4. 删除用户自配置文件
+4.删除用户自配置文件
